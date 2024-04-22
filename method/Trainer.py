@@ -8,7 +8,7 @@ class Trainer:
     Train a deep neural network and see how it works on a validation set during training
     """
 
-    def __init__(self, model, batch_size: int, num_epoch: int, training_set, validation_set=None, verify_step_size=10):
+    def __init__(self, model, batch_size: int, num_epoch: int, training_set, validation_set=None, validate_step_size=10):
         """
         Initialization Trainer. Criterion defaults to nn.CrossEntropyLoss()
         :param model: Pytorch neural network
@@ -16,12 +16,18 @@ class Trainer:
         :param num_epoch: How many times will the training_set be iteratively trained
         :param training_set: Data set for training
         :param validation_set: Data set for validation. (optional) Defaults to None mean does not compute the model's loss value on the validation set during training.
-        :param verify_step_size: How many epochs to calculate the loss value of model on validation_set. (optional) Defaults to 10. (This parameter is invalid when validation_set is False)
+        :param validate_step_size: How many epochs to calculate the loss value of model on validation_set. (optional) Defaults to 10. (This parameter is invalid when validation_set is False)
         """
-        # Initialize the global variable
+        # Acceleration with cuda
+        if torch.cuda.is_available():
+            print('cuda activated')
+            model = model.cuda()
+        else:
+            print('cuda not activated')        
         self.model = model
+        # Initialize the global variable
         self.num_epoch = num_epoch
-        self.verify_step_size = verify_step_size
+        self.validate_step_size = validate_step_size
         # Use torch's DataLoader to load the data
         self.training_loader = DataLoader(training_set, batch_size=batch_size, shuffle=True, drop_last=True)
         if validation_set is None:
@@ -80,7 +86,7 @@ class Trainer:
             loss_list_index_training.append(epoch)
             loss_list_value_training.append(sum(loss_list) / len(loss_list))
             # Validate as required
-            if self.validation_loader is not None and epoch % self.verify_step_size == 0:
+            if self.validation_loader is not None and epoch % self.validate_step_size == 0:
                 with torch.no_grad():
                     # validation in each epoch
                     for index, data in enumerate(self.validation_loader):
