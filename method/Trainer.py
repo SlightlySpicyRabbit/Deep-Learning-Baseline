@@ -14,8 +14,8 @@ class Trainer:
         :param model: Pytorch neural network
         :param batch_size: How many data are extracted for training/validation at a time
         :param num_epoch: How many times will the training_set be iteratively trained
-        :param training_set: Data set for training
-        :param validation_set: Data set for validation. (optional) Defaults to None mean does not compute the model's loss value on the validation set during training.
+        :param training_set: Dataset for training
+        :param validation_set: Dataset for validation. (optional) Defaults to None mean does not compute the model's loss value on the validation set during training.
         :param validate_step_size: How many epochs to calculate the loss value of model on validation_set. (optional) Defaults to 10. (This parameter is invalid when validation_set is False)
         """
         # Acceleration with cuda
