@@ -10,6 +10,10 @@ Train your neural networks easily and supports multiple optimizers:
 * RMSprop
 * Adam
 
+Provide some basic neural network architecture:
+* Multilayer perceptron with batch normalization (optional)
+* Inception Resnet v1
+
 It can be used to check the loss value on validation set during training process (This will help you to observe overfitting)
 
 Visualization shows the change in loss value between the training set and the validation set during training process
