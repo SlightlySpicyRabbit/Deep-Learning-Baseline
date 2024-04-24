@@ -21,7 +21,7 @@ class Trainer:
         # Acceleration with cuda
         if torch.cuda.is_available():
             print('cuda activated')
-            model = model.to(torch.device('gpu'))
+            model = model.to(torch.device('cuda'))
         else:
             print('cuda not activated')
             model = model.to(torch.device('cpu'))        
@@ -48,8 +48,8 @@ class Trainer:
         img, label = data
         # Acceleration with cuda
         if torch.cuda.is_available():
-            img = img.to(torch.device('gpu'))
-            label = label.to(torch.device('gpu'))
+            img = img.to(torch.device('cuda'))
+            label = label.to(torch.device('cuda'))
         else:
             img = img.to(torch.device('cpu'))   
             label = label.to(torch.device('cpu'))   
