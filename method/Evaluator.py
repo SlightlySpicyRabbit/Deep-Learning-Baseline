@@ -17,6 +17,13 @@ class Evaluator:
         :param dataset: Dataset for evaluation
         :param batch_size: How many data are extracted for evaluation at a time
         """
+        # Acceleration with cuda
+        if torch.cuda.is_available():
+            print('cuda activated')
+            model = model.to(torch.device('gpu'))
+        else:
+            print('cuda not activated')
+            model = model.to(torch.device('cpu'))
         with torch.no_grad():
             # Switch the model to evaluation mode
             model.eval()
@@ -33,11 +40,11 @@ class Evaluator:
                 img, label_true = data
                 # Acceleration with cuda
                 if torch.cuda.is_available():
-                    img = img.cuda()
-                    label_true = label_true.cuda()
+                    img = img.to(torch.device('gpu'))
+                    label_true = label_true.to(torch.device('gpu'))
                 else:
-                    img = img
-                    label_true = label_true
+                    img = img.to(torch.device('cpu')) 
+                    label_true = label_true.to(torch.device('cpu')) 
                 # Calculate output
                 out = model(img)
                 # Calculate loss

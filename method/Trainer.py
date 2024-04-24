@@ -21,9 +21,10 @@ class Trainer:
         # Acceleration with cuda
         if torch.cuda.is_available():
             print('cuda activated')
-            model = model.cuda()
+            model = model.to(torch.device('gpu'))
         else:
-            print('cuda not activated')        
+            print('cuda not activated')
+            model = model.to(torch.device('cpu'))        
         self.model = model
         # Initialize the global variable
         self.num_epoch = num_epoch
@@ -47,11 +48,11 @@ class Trainer:
         img, label = data
         # Acceleration with cuda
         if torch.cuda.is_available():
-            img = img.cuda()
-            label = label.cuda()
+            img = img.to(torch.device('gpu'))
+            label = label.to(torch.device('gpu'))
         else:
-            img = img
-            label = label
+            img = img.to(torch.device('cpu'))   
+            label = label.to(torch.device('cpu'))   
         # Calculate loss
         out = self.model(img)
         loss = self.criterion(out, label)
@@ -141,16 +142,17 @@ class Trainer:
         print("Training by RMSprop")
         return self.__train_model(optimizer)
 
-    def adam(self, dataset, learning_rate: float, beta_1: float, beta_2: float) -> tuple[list, list, list, list]:
+    def adam(self, learning_rate: float, beta_1: float, beta_2: float, weight_decay=0) -> tuple[list, list, list, list]:
         """
         Training a model by using adam
         :param learning_rate: Learning rate of training
         :param beta_1: Factor for first-order moment estimation
         :param beta_2: Factor for Second-order moment estimation
+        :param weight_decay: L2 regularization coefficient. Defaults to 0.
         :return: A tuple with 4 list. It records the loss value and index of training/validation set (Used to track the training process and does NOT affect the training effect)
         """
         # Initialize optimizer
-        optimizer = torch.optim.Adam(self.model.parameters(), lr=learning_rate, betas=(beta_1, beta_2))
+        optimizer = torch.optim.Adam(self.model.parameters(), lr=learning_rate, betas=(beta_1, beta_2), weight_decay=weight_decay)
         # Training
         print("Training by adam")
         return self.__train_model(optimizer)
