@@ -20,7 +20,7 @@ class Evaluator:
         # Acceleration with cuda
         if torch.cuda.is_available():
             print('cuda activated')
-            model = model.to(torch.device('cuda'))
+            model = model.to(torch.device('gpu'))
         else:
             print('cuda not activated')
             model = model.to(torch.device('cpu'))
