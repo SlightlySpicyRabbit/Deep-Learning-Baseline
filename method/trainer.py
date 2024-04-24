@@ -1,6 +1,8 @@
 import torch
 from torch import nn
 from torch.utils.data import DataLoader
+from method.optimizer.lion import Lion
+from method.optimizer.signal_momentum import Signum
 
 
 class Trainer:
@@ -155,4 +157,32 @@ class Trainer:
         optimizer = torch.optim.Adam(self.model.parameters(), lr=learning_rate, betas=(beta_1, beta_2), weight_decay=weight_decay)
         # Training
         print("Training by adam")
+        return self.__train_model(optimizer)
+    
+    def signum(self, learning_rate: float, beta_1: float) -> tuple[list, list, list, list]:
+        """
+        Training a model by using signum
+        :param learning_rate: Learning rate of training
+        :param beta_1: Factor for first-order moment estimation
+        :return: A tuple with 4 list. It records the loss value and index of training/validation set (Used to track the training process and does NOT affect the training effect)
+        """
+        # Initialize optimizer
+        optimizer = Signum(self.model.parameters(), lr=learning_rate, beta=beta_1)
+        # Training
+        print("Training by Signum")
+        return self.__train_model(optimizer)
+    
+
+    def lion(self, learning_rate: float, beta_1: float, beta_3: float) -> tuple[list, list, list, list]:
+        """
+        Training a model by using lion
+        :param learning_rate: Learning rate of training
+        :param beta_1: Factor for first-order moment estimation
+        :param beta_3: Factor for weighted update
+        :return: A tuple with 4 list. It records the loss value and index of training/validation set (Used to track the training process and does NOT affect the training effect)
+        """
+        # Initialize optimizer
+        optimizer = Lion(self.model.parameters(), lr=learning_rate, betas=(beta_1, beta_3))
+        # Training
+        print("Training by Lion")
         return self.__train_model(optimizer)

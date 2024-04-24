@@ -9,10 +9,12 @@ Train your neural networks easily and supports multiple optimizers:
 * Momentum
 * RMSprop
 * Adam
+* Signal momentum (based on [arXiv:1802.04434](https://arxiv.org/abs/1802.04434))
+* Lion (based on [arXiv:2302.06675](https://arxiv.org/abs/2302.06675))
 
 Provide some basic neural network architecture:
 * Multilayer perceptron with batch normalization (optional)
-* Inception Resnet v1
+* Inception ResNet v1
 
 It can be used to check the loss value on validation set during training process (This will help you to observe overfitting)
 
